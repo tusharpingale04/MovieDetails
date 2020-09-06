@@ -3,11 +3,11 @@ package com.tushar.mdetails.data.repository
 import android.util.Log
 import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.data.local.MovieDao
-import com.tushar.mdetails.data.local.Query
 import com.tushar.mdetails.mapper.MoviesResponseMapper
-import com.tushar.mdetails.models.GetMovieListResponse
+import com.tushar.mdetails.data.remote.GetMovieListResponse
 import com.tushar.mdetails.models.State
 import com.tushar.mdetails.network.MoviesApiService
+import com.tushar.mdetails.utils.Constants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ class MoviesRepository
 ){
 
     fun getMoviesList(pageNo: Int): Flow<State<List<Movie>>> {
-        return object : NetworkBoundRepository<List<Movie>,GetMovieListResponse>(){
+        return object : NetworkBoundRepository<List<Movie>, GetMovieListResponse>(){
             override suspend fun saveRemoteData(response: GetMovieListResponse) {
                 response.results?.map { movie ->
                     movie.timestamp = System.currentTimeMillis()
@@ -33,6 +33,7 @@ class MoviesRepository
                     for (movie in movies) {
                         movieDao.insert(
                             Movie(
+                                movieId = movie.movieId,
                                 originalTitle = movie.originalTitle,
                                 overview = movie.overview,
                                 voteAverage = movie.voteAverage,
@@ -61,17 +62,18 @@ class MoviesRepository
     }
 
     fun fetchNowPlaying(pageNo: Int) : Flow<Resource<List<Movie>>>{
-        return object : NetworkBoundResource<List<Movie>,GetMovieListResponse, MoviesResponseMapper>(){
-            override suspend fun saveNetworkResult(response: GetMovieListResponse) {
-                response.results?.map { movie ->
+        return object : NetworkBoundResource<List<Movie>, GetMovieListResponse, MoviesResponseMapper>(){
+            override suspend fun saveNetworkResult(item: GetMovieListResponse) {
+                item.results?.map { movie ->
                     movie.timestamp = System.currentTimeMillis()
                     delay(10)
                 }
 
-                response.results?.let { movies ->
+                item.results?.let { movies ->
                     for (movie in movies) {
                         movieDao.insert(
                             Movie(
+                                movieId = movie.movieId,
                                 originalTitle = movie.originalTitle,
                                 overview = movie.overview,
                                 voteAverage = movie.voteAverage,

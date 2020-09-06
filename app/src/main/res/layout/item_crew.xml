@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.tushar.mdetails.ui.moviedetails.CrewViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="125dp"
+        android:layout_height="@dimen/dp_200"
+        android:layout_margin="@dimen/dimen_4">
+
+        <ImageView
+            android:id="@+id/image_crew"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadSmallImage="@{vm.item.profile_path}"
+            app:layout_constraintBottom_toTopOf="@+id/text_name"
+            />
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16"
+            android:layout_marginEnd="@dimen/dimen_16"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_crew"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@{vm.item.name}"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -14,7 +14,7 @@ class RecyclerViewPaginator(
         private val onLast: () -> Boolean = { true }
 ) : RecyclerView.OnScrollListener() {
 
-    var threshold = 5
+    var threshold = 1
     var currentPage: Int = 0
     var endWithAuto = false
 

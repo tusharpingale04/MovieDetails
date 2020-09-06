@@ -5,11 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.tushar.mdetails.R
+import com.tushar.mdetails.data.local.Movie
+import com.tushar.mdetails.data.repository.Resource
+import com.tushar.mdetails.databinding.MovieDetailsFragmentBinding
+import com.tushar.mdetails.di.MovieScope
+import com.tushar.mdetails.extensions.hide
+import com.tushar.mdetails.extensions.show
 import com.tushar.mdetails.ui.MainActivityViewModel
+import com.tushar.mdetails.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
     companion object {
@@ -17,6 +32,26 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private lateinit var viewModel: MovieDetailsViewModel
+    private lateinit var binding: MovieDetailsFragmentBinding
+    lateinit var bundle: Bundle
+
+    @MovieScope
+    @Inject
+    lateinit var castAdapter : CastAdapter
+
+    @MovieScope
+    @Inject
+    lateinit var crewAdapter :CrewAdapter
+
+    @MovieScope
+    @Inject
+    lateinit var similarMovieAdapter : SimilarMovieAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        bundle = requireArguments()
+
+    }
 
     private val cachedVm : MainActivityViewModel by lazy {
         activity?.run {
@@ -28,12 +63,91 @@ class MovieDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.movie_details_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.movie_details_fragment, container, false)
+        viewModel = ViewModelProvider(this).get(MovieDetailsViewModel::class.java)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MovieDetailsViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.apply {
+            val id = bundle.getParcelable<Movie>(Constants.MOVIE)!!.movieId
+            movie.value = bundle.getParcelable(Constants.MOVIE)
+            loadCastAndCrew(id)
+            loadSimilarMovie(id)
+        }
+        binding.imageBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        subscribeObservers()
+        attachAdapters()
+    }
+
+    private fun attachAdapters() {
+        if (binding.recyclerCast.adapter == null) {
+            binding.recyclerCast.adapter = castAdapter
+        }
+        if (binding.recyclerCrew.adapter == null) {
+            binding.recyclerCrew.adapter = crewAdapter
+        }
+        if (binding.recyclerSimilarMovie.adapter == null) {
+            binding.recyclerSimilarMovie.adapter = similarMovieAdapter
+        }
+    }
+
+    private fun subscribeObservers() {
+        viewModel.similarMoviesLiveData.observe(viewLifecycleOwner, { resource ->
+            when (resource.status) {
+                Resource.Status.LOADING -> {
+                    showLoading(true)
+                }
+                Resource.Status.SUCCESS -> {
+                    showLoading(false)
+                    if (!resource.data?.results.isNullOrEmpty()) {
+                        similarMovieAdapter.submitList(resource.data!!.results!!.toMutableList())
+                    }
+                }
+                Resource.Status.ERROR -> {
+                    showLoading(false)
+                    resource?.message?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+        viewModel.castLiveData.observe(viewLifecycleOwner, Observer {resource ->
+            when (resource.status) {
+                Resource.Status.LOADING -> {
+                    showLoading(true)
+                }
+                Resource.Status.SUCCESS -> {
+                    showLoading(false)
+                    if (!resource.data?.cast.isNullOrEmpty()) {
+                        castAdapter.submitList(resource.data!!.cast!!.toMutableList())
+                    }
+                    if (!resource.data?.crew.isNullOrEmpty()) {
+                        crewAdapter.submitList(resource.data!!.crew!!.toMutableList())
+                    }
+                }
+                Resource.Status.ERROR -> {
+                    showLoading(false)
+                    resource?.message?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if(isLoading){
+            binding.progressBar.show()
+        }else{
+            binding.progressBar.hide()
+        }
+
     }
 
     override fun onResume() {

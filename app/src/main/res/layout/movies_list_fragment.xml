@@ -33,6 +33,7 @@
             android:layout_height="match_parent"
             app:adapter="@{adapter}"
             app:adapterMovieList="@{viewModel.moviesLiveData}"
+            app:moviePagination="@{viewModel}"
             tools:itemCount="2"
             tools:listitem="@layout/item_movie"/>
 

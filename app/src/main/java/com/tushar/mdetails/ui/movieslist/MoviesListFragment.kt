@@ -19,7 +19,7 @@ import com.tushar.mdetails.extensions.replaceFragment
 import com.tushar.mdetails.extensions.show
 import com.tushar.mdetails.ui.MainActivityViewModel
 import com.tushar.mdetails.ui.moviedetails.MovieDetailsFragment
-import com.tushar.mdetails.utils.RecyclerViewPaginator
+import com.tushar.mdetails.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.IllegalArgumentException
@@ -48,7 +48,13 @@ class MoviesListFragment : Fragment() {
             cachedVm.insertQuery(it.originalTitle)
             cachedVm.getRecentQueries()
             cachedVm.deleteQueries()
-            replaceFragment(requireActivity() as AppCompatActivity, MovieDetailsFragment.newInstance(),R.id.container, "MovieDetailsFragment")
+            replaceFragment(requireActivity() as AppCompatActivity,
+                MovieDetailsFragment.newInstance().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(Constants.MOVIE,it)
+                    }
+                }
+                ,R.id.container, "MovieDetailsFragment")
         }
     }
 
@@ -60,7 +66,6 @@ class MoviesListFragment : Fragment() {
         binding.viewModel = viewModel
         binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-
         return binding.root
     }
 
@@ -79,26 +84,6 @@ class MoviesListFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
-        binding.rvMovies.addOnScrollListener(object : RecyclerViewPaginator(binding.rvMovies) {
-            override val isLastPage: Boolean
-                get() = viewModel.isLastPage()
-
-
-            override fun loadMore(nextPage: Int) {
-                viewModel.setMoviePage(nextPage)
-            }
-        })
-        /*binding.rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastPosition = layoutManager.findLastVisibleItemPosition()
-                if (lastPosition == adapter.itemCount.minus(1) && cachedVm.searchQuery.value.isNullOrEmpty()) {
-                    viewModel.loadNextPage()
-                }
-            }
-        })*/
-        binding.rvMovies.adapter = adapter
     }
 
     private fun initObservers() {
@@ -109,9 +94,9 @@ class MoviesListFragment : Fragment() {
                 }
                 Resource.Status.SUCCESS -> {
                     showLoading(false)
-                    if (!resource.data.isNullOrEmpty()) {
+                    /*if (!resource.data.isNullOrEmpty()) {
                         adapter.submitList(resource.data.toMutableList())
-                    }
+                    }*/
                 }
                 Resource.Status.ERROR -> {
                     showLoading(false)

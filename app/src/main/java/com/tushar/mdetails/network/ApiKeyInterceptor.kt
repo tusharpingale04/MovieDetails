@@ -7,7 +7,7 @@ class ApiKeyInterceptor : Interceptor {
 
     companion object{
         const val API_KEY = "api_key"
-        const val KEY = ""
+        const val KEY = "2cdf3a5c7cf412421485f89ace91e373"
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -17,6 +17,7 @@ class MovieAdapter(private val callBack: (Movie) -> Unit) : BaseAdapter<Movie>(D
         NO_MORE_RESULTS,
         "",
         "",
+        "",
         0.0,
         "",
         "",
@@ -65,7 +66,7 @@ class MovieAdapter(private val callBack: (Movie) -> Unit) : BaseAdapter<Movie>(D
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (currentList[position].id > -1) {
+        if (currentList[position].mId > -1) {
             return MOVIE_ITEM
         }
         return NO_MORE_RESULTS
@@ -78,7 +79,7 @@ class MovieAdapter(private val callBack: (Movie) -> Unit) : BaseAdapter<Movie>(D
 
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Movie>() {
             override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
-                oldItem.id == newItem.id
+                oldItem.mId == newItem.mId
 
             override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
                 oldItem == newItem
@@ -93,6 +94,6 @@ class MovieAdapter(private val callBack: (Movie) -> Unit) : BaseAdapter<Movie>(D
     }
 
     override fun getItemId(position: Int): Long {
-        return currentList[position].id.toLong()
+        return currentList[position].mId.toLong()
     }
 }

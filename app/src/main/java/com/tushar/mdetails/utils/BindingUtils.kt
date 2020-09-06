@@ -14,7 +14,7 @@ fun loadSmallImage(imageView: ImageView,url: String?) {
             placeholder(R.drawable.dummy_image)
             error(R.drawable.ic_broken_image)
         }
-    }
+    } ?: imageView.setImageResource(R.drawable.ic_broken_image)
 }
 
 @BindingAdapter("loadLargeImage")
@@ -24,7 +24,7 @@ fun loadLargeImage(imageView: ImageView,url: String?) {
             placeholder(R.drawable.dummy_image)
             error(R.drawable.ic_broken_image)
         }
-    }
+    } ?: imageView.setImageResource(R.drawable.ic_broken_image)
 }
 
 @BindingAdapter("setRating")

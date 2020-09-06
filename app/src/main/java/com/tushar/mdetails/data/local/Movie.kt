@@ -17,7 +17,11 @@ data class Movie(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id: Int = 0,
+    var mId: Int = 0,
+
+    @ColumnInfo(name = "movie_id")
+    @SerializedName("id")
+    var movieId: String,
 
     @ColumnInfo(name = "original_title")
     @SerializedName("original_title")
