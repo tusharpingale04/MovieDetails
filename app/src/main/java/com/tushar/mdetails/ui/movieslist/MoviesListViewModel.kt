@@ -5,13 +5,12 @@ import androidx.lifecycle.*
 import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.data.repository.MoviesRepository
 import com.tushar.mdetails.data.repository.Resource
-import com.tushar.mdetails.utils.Constants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
- *
+ * MoviesListViewModel which acts as an intermediate to fetch No Playing Movies and Show it to UI
  */
 @ExperimentalCoroutinesApi
 class MoviesListViewModel @ViewModelInject constructor(

@@ -15,7 +15,6 @@ import com.tushar.mdetails.databinding.ActivityMainBinding
 import com.tushar.mdetails.extensions.hide
 import com.tushar.mdetails.extensions.replaceFragment
 import com.tushar.mdetails.extensions.show
-import com.tushar.mdetails.extensions.showToast
 import com.tushar.mdetails.ui.movieslist.MoviesListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi

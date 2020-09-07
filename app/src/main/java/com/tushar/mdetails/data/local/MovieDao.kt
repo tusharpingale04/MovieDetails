@@ -3,7 +3,6 @@ package com.tushar.mdetails.data.local
 import androidx.room.*
 import androidx.room.Query
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.tushar.mdetails.utils.Constants.PAGINATION_PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
 
 @Dao

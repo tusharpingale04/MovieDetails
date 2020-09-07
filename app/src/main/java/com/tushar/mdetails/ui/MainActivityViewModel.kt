@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tushar.mdetails.data.local.Query
 import com.tushar.mdetails.data.local.RecentSearchDao
+import com.tushar.mdetails.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -15,7 +16,7 @@ class MainActivityViewModel @ViewModelInject constructor(
 ): ViewModel() {
 
     val showSearchBox = MutableLiveData(false)
-    val searchQuery = MutableLiveData("")
+    val searchQuery = SingleLiveEvent<String>()
 
     private val _queriesLiveData = MutableLiveData<List<Query>>()
 
