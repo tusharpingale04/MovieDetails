@@ -1,6 +1,7 @@
 package com.tushar.mdetails.ui.moviedetails
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
@@ -20,6 +21,7 @@ class SimilarMovieAdapter : BaseAdapter<Movie>(DIFF_CALLBACK) {
         )
         val viewModel = MovieRowViewModel()
         mBinding.vm = viewModel
+        mBinding.btnBookNow.visibility = View.GONE
         return mBinding
     }
 

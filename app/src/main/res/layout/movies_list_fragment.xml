@@ -6,9 +6,6 @@
             name="viewModel"
             type="com.tushar.mdetails.ui.movieslist.MoviesListViewModel" />
 
-        <variable
-            name="adapter"
-            type="com.tushar.mdetails.ui.movieslist.MovieAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,9 +28,6 @@
             android:id="@+id/rv_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:adapter="@{adapter}"
-            app:adapterMovieList="@{viewModel.moviesLiveData}"
-            app:moviePagination="@{viewModel}"
             tools:itemCount="2"
             tools:listitem="@layout/item_movie"/>
 

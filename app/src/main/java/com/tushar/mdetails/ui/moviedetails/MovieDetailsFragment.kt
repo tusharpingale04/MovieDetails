@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.TransitionInflater
 import com.tushar.mdetails.R
 import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.data.repository.Resource
@@ -50,6 +51,7 @@ class MovieDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bundle = requireArguments()
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
 
     }
 
@@ -107,6 +109,9 @@ class MovieDetailsFragment : Fragment() {
                     showLoading(false)
                     if (!resource.data?.results.isNullOrEmpty()) {
                         similarMovieAdapter.submitList(resource.data!!.results!!.toMutableList())
+                    }else{
+                        binding.textSimilarMovie.hide()
+                        binding.recyclerSimilarMovie.hide()
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -126,9 +131,15 @@ class MovieDetailsFragment : Fragment() {
                     showLoading(false)
                     if (!resource.data?.cast.isNullOrEmpty()) {
                         castAdapter.submitList(resource.data!!.cast!!.toMutableList())
+                    }else{
+                        binding.textCast.hide()
+                        binding.recyclerCast.hide()
                     }
                     if (!resource.data?.crew.isNullOrEmpty()) {
                         crewAdapter.submitList(resource.data!!.crew!!.toMutableList())
+                    }else{
+                        binding.textCrew.hide()
+                        binding.recyclerCrew.hide()
                     }
                 }
                 Resource.Status.ERROR -> {

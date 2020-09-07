@@ -1,6 +1,8 @@
 package com.tushar.mdetails.data.repository
 
 import androidx.annotation.MainThread
+import com.google.gson.Gson
+import com.tushar.mdetails.network.ApiError
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -25,7 +27,13 @@ abstract class NetworkResource<T> {
                 emit(Resource.success(body))
             } else {
                 // Something went wrong! Emit Error state with message.
-                emit(Resource.error(apiResponse.message(), null))
+                val apiError: ApiError = Gson().fromJson(apiResponse.errorBody()?.charStream(), ApiError::class.java)
+                val errorMsg = if (!apiError.errorMessage.isNullOrEmpty()) {
+                    apiError.errorMessage
+                } else{
+                    "Something Went Wrong! Please Try Again Later"
+                }
+                emit(Resource.error(errorMsg, null))
             }
         } catch (e: Exception) {
             // Exception occurred! Emit error

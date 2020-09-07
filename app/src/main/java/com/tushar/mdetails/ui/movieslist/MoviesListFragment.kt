@@ -1,17 +1,22 @@
 package com.tushar.mdetails.ui.movieslist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tushar.mdetails.R
+import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.data.repository.Resource
 import com.tushar.mdetails.databinding.MoviesListFragmentBinding
 import com.tushar.mdetails.extensions.hide
@@ -43,18 +48,19 @@ class MoviesListFragment : Fragment() {
     }
 
     private lateinit var binding: MoviesListFragmentBinding
+
     private  val adapter: MovieAdapter by lazy {
-        MovieAdapter {
-            cachedVm.insertQuery(it.originalTitle)
+        MovieAdapter{ movie: Movie, imageView: ImageView ->
+            cachedVm.insertQuery(movie.originalTitle)
             cachedVm.getRecentQueries()
             cachedVm.deleteQueries()
             replaceFragment(requireActivity() as AppCompatActivity,
                 MovieDetailsFragment.newInstance().apply {
                     arguments = Bundle().apply {
-                        putParcelable(Constants.MOVIE,it)
+                        putParcelable(Constants.MOVIE,movie)
                     }
                 }
-                ,R.id.container, "MovieDetailsFragment")
+                ,R.id.container, "MovieDetailsFragment", imageView)
         }
     }
 
@@ -64,7 +70,6 @@ class MoviesListFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.movies_list_fragment, container, false)
         binding.viewModel = viewModel
-        binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -73,7 +78,9 @@ class MoviesListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         initRecyclerView()
         initObservers()
-        viewModel.setMoviePage(1)
+        if(savedInstanceState == null){
+            viewModel.getNowPlaying()
+        }
     }
 
     private fun initRecyclerView() {
@@ -84,6 +91,7 @@ class MoviesListFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
+        binding.rvMovies.adapter = adapter
     }
 
     private fun initObservers() {
@@ -94,9 +102,9 @@ class MoviesListFragment : Fragment() {
                 }
                 Resource.Status.SUCCESS -> {
                     showLoading(false)
-                    /*if (!resource.data.isNullOrEmpty()) {
+                    if (!resource.data.isNullOrEmpty()) {
                         adapter.submitList(resource.data.toMutableList())
-                    }*/
+                    }
                 }
                 Resource.Status.ERROR -> {
                     showLoading(false)
@@ -107,7 +115,7 @@ class MoviesListFragment : Fragment() {
             }
         }
 
-        /*cachedVm.searchQuery.observe(viewLifecycleOwner, {
+        cachedVm.searchQuery.observe(viewLifecycleOwner, {
             if(!it.isNullOrEmpty()){
                 viewModel.getFilteredMovies(it)
             }else{
@@ -117,13 +125,13 @@ class MoviesListFragment : Fragment() {
 
         viewModel.filteredMoviesLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                adapter.submitList(it,true)
+                adapter.submitList(it)
             } ?: setDefaultList()
-        })*/
+        })
     }
 
     private fun setDefaultList() {
-        //viewModel.loadFirstPage()
+        viewModel.getNowPlaying()
     }
 
     private fun showLoading(isLoading: Boolean) {

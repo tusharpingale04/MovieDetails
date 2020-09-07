@@ -4,6 +4,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import androidx.databinding.BindingAdapter
 import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.tushar.mdetails.BuildConfig
 import com.tushar.mdetails.R
 
@@ -13,6 +14,17 @@ fun loadSmallImage(imageView: ImageView,url: String?) {
         imageView.load(BuildConfig.SMALL_IMAGE_URL+it) {
             placeholder(R.drawable.dummy_image)
             error(R.drawable.ic_broken_image)
+        }
+    } ?: imageView.setImageResource(R.drawable.ic_broken_image)
+}
+
+@BindingAdapter("loadCircularImage")
+fun loadCircularImage(imageView: ImageView,url: String?) {
+    url?.let {
+        imageView.load(BuildConfig.SMALL_IMAGE_URL+it) {
+            placeholder(R.drawable.dummy_image)
+            error(R.drawable.ic_broken_image)
+            transformations(CircleCropTransformation())
         }
     } ?: imageView.setImageResource(R.drawable.ic_broken_image)
 }

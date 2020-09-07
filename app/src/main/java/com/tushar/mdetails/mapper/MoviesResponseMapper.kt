@@ -5,6 +5,6 @@ import com.tushar.mdetails.data.remote.GetMovieListResponse
 
 class MoviesResponseMapper : NetworkResponseMapper<GetMovieListResponse> {
     override fun onLastPage(response: GetMovieListResponse): Boolean {
-        return response.page == response.totalPages
+        return true
     }
 }

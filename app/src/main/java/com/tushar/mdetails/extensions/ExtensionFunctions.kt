@@ -5,10 +5,12 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -64,7 +66,8 @@ fun Fragment.replaceFragment(
     context: AppCompatActivity,
     fragment: Fragment,
     frameId: Int,
-    backStackTag: String? = null
+    backStackTag: String? = null,
+    imageView: ImageView
 ) {
     fragment.apply {
         enterTransition = Slide(Gravity.END)
@@ -72,6 +75,8 @@ fun Fragment.replaceFragment(
     }
     context.supportFragmentManager.inTransaction {
         replace(frameId, fragment)
+
+        addSharedElement(imageView,ViewCompat.getTransitionName(imageView)!!)
         backStackTag?.let { addToBackStack(it) }
     }
 }
@@ -89,14 +94,4 @@ fun View.hide() {
  */
 fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
-}
-
-inline fun <reified T> View.bindResource(resource: Resource<T>?, onSuccess: (Resource<T>) -> Unit) {
-    if (resource != null) {
-        when (resource.status) {
-            Resource.Status.LOADING -> Unit
-            Resource.Status.SUCCESS -> onSuccess(resource)
-            Resource.Status.ERROR ->{}
-        }
-    }
 }

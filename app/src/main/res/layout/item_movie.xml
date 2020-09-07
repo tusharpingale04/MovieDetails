@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.tushar.mdetails.ui.movieslist.MovieRowViewModel" />
     </data>
 
     <RelativeLayout
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:id="@+id/rootView">
+        android:layout_height="230dp">
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:transitionName="imageView"
             android:adjustViewBounds="true"
-            app:loadLargeImage="@{vm.item.posterPath}"
+            android:scaleType="fitXY"
+            android:transitionName="backDrop"
+            app:loadLargeImage="@{vm.item.backdropPath}"
             tools:src="@drawable/dummy_image" />
 
         <View
@@ -39,28 +40,46 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:weightSum="5">
 
-                <TextView
-                    android:id="@+id/date"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.item.releaseDate}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/grey_10"
+                        tools:text="Wed, 20 Jan 19, 05:08 PM" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:stepSize="0.1"
+                        app:setRating="@{vm.item.voteAverage}"
+                        tools:rating="4.1" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnBookNow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Wed, 20 Jan 19, 05:08 PM"
-                    android:text="@{vm.item.releaseDate}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/grey_10" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    tools:rating="4.1"
-                    android:stepSize="0.1"
-                    app:setRating="@{vm.item.voteAverage}"
-                    />
+                    android:layout_weight="0.05"
+                    android:textColor="@color/white"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/book_now" />
 
             </LinearLayout>
+
 
             <TextView
                 android:id="@+id/title"
@@ -68,11 +87,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:maxLines="2"
-                tools:text="Extraction"
                 android:text="@{vm.item.originalTitle}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
-                app:fontFamily="sans-serif-medium" />
+                app:fontFamily="sans-serif-medium"
+                tools:text="Extraction" />
 
         </LinearLayout>
 

@@ -1,6 +1,5 @@
 package com.tushar.mdetails.network
 
-import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.data.remote.GetCastAndCrewResponse
 import com.tushar.mdetails.data.remote.GetMovieListResponse
 import retrofit2.Response
@@ -14,11 +13,6 @@ interface MoviesApiService {
     suspend fun getLatestMovies(
         @Query("page") page: Int
     ): Response<GetMovieListResponse>
-
-    @GET("movie/{movie_id}")
-    suspend fun getMovie(
-        @Path("movie_id") movieId: String
-    ): Response<Movie>
 
     @GET("movie/{movie_id}/credits")
     suspend fun getMovieCredits(
