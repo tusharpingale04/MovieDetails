@@ -3,6 +3,10 @@ package com.tushar.mdetails.network
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * This class adds an api key to the url
+ * for eg: https://url.com?api_key=jbhdjsvdjh12e12ec
+ */
 class ApiKeyInterceptor : Interceptor {
 
     companion object{

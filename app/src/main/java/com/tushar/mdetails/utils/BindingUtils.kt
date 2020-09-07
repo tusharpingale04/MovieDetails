@@ -8,6 +8,9 @@ import coil.transform.CircleCropTransformation
 import com.tushar.mdetails.BuildConfig
 import com.tushar.mdetails.R
 
+/**
+ * Consists of all binding adapters used in the layout file
+ */
 @BindingAdapter("loadSmallImage")
 fun loadSmallImage(imageView: ImageView,url: String?) {
     url?.let {

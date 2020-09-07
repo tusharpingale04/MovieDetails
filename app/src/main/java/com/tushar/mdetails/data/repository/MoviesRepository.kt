@@ -21,6 +21,9 @@ class MoviesRepository
     private val apiService: MoviesApiService
 ){
 
+    /**
+     * Fetches Now Playing from the API or DB
+     */
     fun fetchNowPlaying(pageNo: Int) : Flow<Resource<List<Movie>>>{
         return object : NetworkBoundResource<List<Movie>, GetMovieListResponse, MoviesResponseMapper>(){
             override suspend fun saveNetworkResult(item: GetMovieListResponse) {
@@ -72,6 +75,10 @@ class MoviesRepository
         }.asFlow()
     }
 
+    /**
+     * Filter DB based on raw query
+     * @param query is the query entered into the search box
+     */
     fun getFilteredMovies(query: String): Flow<List<Movie>>{
         val array = query.split(" ")
         var queryString = ""

@@ -14,6 +14,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel which acts as an intermediate between view and data(Network or DB)
+ * @param repository is the instance of [MovieDetailsRepository] to fetch data from DB or Network
+ */
 @ExperimentalCoroutinesApi
 class MovieDetailsViewModel @ViewModelInject constructor(
     val repository: MovieDetailsRepository
@@ -28,7 +32,10 @@ class MovieDetailsViewModel @ViewModelInject constructor(
     val castLiveData: LiveData<Resource<GetCastAndCrewResponse>>
         get() = _castLiveData
 
-
+    /**
+     * Loads Cast and Crew from the Api
+     * @param movieId is the id of the movie whose details are to be loaded
+     */
     fun loadCastAndCrew(movieId: String) {
         viewModelScope.launch {
             repository.getCrewAndCast(movieId).collect {
@@ -37,6 +44,10 @@ class MovieDetailsViewModel @ViewModelInject constructor(
         }
     }
 
+    /**
+     * Loads Similar Movies from the Api
+     * @param movieId is the id of the movie whose details are to be loaded
+     */
     fun loadSimilarMovie(movieId: String) {
         viewModelScope.launch {
             repository.getSimilarMovies(movieId).collect {

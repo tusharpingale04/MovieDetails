@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import com.tushar.mdetails.base.BaseAdapter
 import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.databinding.ItemMovieBinding
-
+/**
+ * Adapter class to inflate Movies items in Movie List Screen
+ * @param callBack is a higher order function to provide callback to the fragment on item click
+ */
 class MovieAdapter(private val callBack: (Movie, ImageView) -> Unit) : BaseAdapter<Movie>(DIFF_CALLBACK) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {

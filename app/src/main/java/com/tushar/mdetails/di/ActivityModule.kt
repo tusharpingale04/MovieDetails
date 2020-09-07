@@ -8,6 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 
+/**
+ * This Class provides all the dependencies which are scoped to [MovieScope] and are available in the MainActivity class.
+ */
 @Module
 @InstallIn(ActivityComponent::class)
 class ActivityModule {

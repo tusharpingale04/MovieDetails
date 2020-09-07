@@ -11,6 +11,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
 
+/**
+ * This Class provides all the dependencies which are related to DAO and App Database
+ */
 @InstallIn(ApplicationComponent::class)
 @Module
 class DatabaseModule {

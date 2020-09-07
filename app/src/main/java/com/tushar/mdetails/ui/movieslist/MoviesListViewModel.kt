@@ -10,6 +10,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+/**
+ *
+ */
 @ExperimentalCoroutinesApi
 class MoviesListViewModel @ViewModelInject constructor(
     private val repository: MoviesRepository
@@ -23,6 +26,9 @@ class MoviesListViewModel @ViewModelInject constructor(
     val filteredMoviesLiveData: LiveData<List<Movie>>
         get() = _filteredMoviesLiveData
 
+    /**
+     * Fetches Now Playing from the API or DB
+     */
     fun getNowPlaying() {
         viewModelScope.launch {
             repository.fetchNowPlaying(1).collect {
@@ -31,6 +37,10 @@ class MoviesListViewModel @ViewModelInject constructor(
         }
     }
 
+    /**
+     * Fetched filtered record from the DB
+     * @param query is pass to filter the movie list as per query
+     */
     fun getFilteredMovies(query: String) {
         viewModelScope.launch {
             repository.getFilteredMovies(query).collect {
@@ -39,6 +49,9 @@ class MoviesListViewModel @ViewModelInject constructor(
         }
     }
 
+    /**
+     * sets empty filter data list
+     */
     fun setEmptyFilteredList() {
         _filteredMoviesLiveData.value = null
 

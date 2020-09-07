@@ -8,6 +8,9 @@ import com.tushar.mdetails.base.BaseAdapter
 import com.tushar.mdetails.data.remote.Crew
 import com.tushar.mdetails.databinding.ItemCrewBinding
 
+/**
+ * Adapter class to inflate crew items in movie details screen
+ */
 class CrewAdapter : BaseAdapter<Crew>(DIFF_CALLBACK) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {

@@ -22,7 +22,9 @@ class MainActivityViewModel @ViewModelInject constructor(
     val queriesLiveData: LiveData<List<Query>>
         get() = _queriesLiveData
 
-
+    /**
+     * This methods fetches all the recent search queries by the user
+     */
     fun getRecentQueries() {
         viewModelScope.launch {
             dao.getAllSearchQueries().collect{
@@ -31,6 +33,10 @@ class MainActivityViewModel @ViewModelInject constructor(
         }
     }
 
+    /**
+     * This method inserts the Query into the DB
+     * @param query is the string which consist of movie name
+     */
     fun insertQuery(query: String){
         viewModelScope.launch {
             dao.insert(
@@ -41,6 +47,9 @@ class MainActivityViewModel @ViewModelInject constructor(
         }
     }
 
+    /**
+     * Deletes additional queries if count is greater than 5
+     */
     fun deleteQueries(){
         viewModelScope.launch {
             dao.deleteAdditionalQueries()

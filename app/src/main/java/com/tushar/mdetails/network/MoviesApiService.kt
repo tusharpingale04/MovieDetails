@@ -7,6 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * This Interface consists of all the abstract methods pertaining to network present inside the app.
+ */
 interface MoviesApiService {
 
     @GET("movie/now_playing")

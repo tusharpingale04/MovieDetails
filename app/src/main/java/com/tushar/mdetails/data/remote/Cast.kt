@@ -14,9 +14,4 @@ data class Cast(
     val name: String?,
     val order: Int?,
     val profile_path: String?
-) : Parcelable {
-
-    fun getFullProfilePath() =
-        if (profile_path.isNullOrBlank()) null else BuildConfig.SMALL_IMAGE_URL + profile_path
-
-}
+) : Parcelable

@@ -1,5 +1,6 @@
 package com.tushar.mdetails.di
 
+import com.tushar.mdetails.BuildConfig
 import com.tushar.mdetails.network.ApiKeyInterceptor
 import com.tushar.mdetails.network.MoviesApiService
 import com.tushar.mdetails.utils.Constants
@@ -13,6 +14,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * The Network Module class provides the dependencies required for Network Operations
+ */
 @InstallIn(ApplicationComponent::class)
 @Module
 class NetworkModule {
@@ -28,7 +32,10 @@ class NetworkModule {
     fun provideOkHttpClientWithInterceptor(apiKeyInterceptor: ApiKeyInterceptor) : OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(apiKeyInterceptor).addInterceptor(
             HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                level = when(BuildConfig.DEBUG){
+                    true -> HttpLoggingInterceptor.Level.BODY
+                    false -> HttpLoggingInterceptor.Level.NONE
+                }
             }
         ).build()
     }

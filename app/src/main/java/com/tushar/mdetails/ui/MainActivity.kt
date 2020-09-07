@@ -20,6 +20,9 @@ import com.tushar.mdetails.ui.movieslist.MoviesListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+/**
+ * This Activity is the container of [MoviesListFragment] & MovieDetailsFragment
+ */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() {
@@ -48,12 +51,18 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         initObservers()
     }
 
+    /**
+     * Subscribe to Search Box Observer
+     */
     private fun initObservers() {
         mViewModel.queriesLiveData.observe(this, {
             refreshAdapter(it)
         })
     }
 
+    /**
+     * Refresh AutoComplete after a query is added
+     */
     private fun refreshAdapter(queries: List<Query>?) {
         adapter.clear()
         queries?.forEach {
@@ -62,15 +71,13 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         adapter.notifyDataSetChanged()
     }
 
+    /**
+     * Sets up Search bar present at the top
+     */
     private fun setUpSearch() {
         mViewBinding.etSearch.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 hideKeyboard()
-                /*if(textView.text.isNotEmpty()){
-                    mViewModel.insertQuery(textView.text.toString())
-                    mViewModel.getRecentQueries()
-                    mViewModel.deleteQueries()
-                }*/
                 mViewModel.searchQuery.value = textView.text.toString()
                 return@setOnEditorActionListener true
             }
@@ -83,6 +90,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         }
     }
 
+    /**
+     * Hides soft keyboard
+     */
     private fun hideKeyboard() {
         val view: View? = this.currentFocus
         if (view != null) {
@@ -91,6 +101,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         }
     }
 
+    /**
+     * Sets up auto complete view with the search box
+     */
     private fun setUpAutoCompleteView() {
         val arrayList = arrayListOf<String>()
         mViewModel.queriesLiveData.value?.let { queries ->
@@ -114,11 +127,16 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         }
     }
 
-
+    /**
+     * Return Current Activity Binding
+     */
     override fun getViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
+    /**
+     * Returns Current Activity ViewModel
+     */
     override val mViewModel: MainActivityViewModel
         get() = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 }

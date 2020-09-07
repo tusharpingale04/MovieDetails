@@ -29,6 +29,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.IllegalArgumentException
 
+/**
+ * This Fragments consists of Movie List along with the details
+ */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MoviesListFragment : Fragment() {
@@ -126,12 +129,8 @@ class MoviesListFragment : Fragment() {
         viewModel.filteredMoviesLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 adapter.submitList(it)
-            } ?: setDefaultList()
+            } ?: viewModel.getNowPlaying()
         })
-    }
-
-    private fun setDefaultList() {
-        viewModel.getNowPlaying()
     }
 
     private fun showLoading(isLoading: Boolean) {

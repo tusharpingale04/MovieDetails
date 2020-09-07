@@ -24,6 +24,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
+/**
+ * This Fragment consist of details regarding the movies
+ * Field inject as per scope wise is performed
+ * Fetches Cast, Crew and Similar Movies
+ */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
@@ -34,7 +39,7 @@ class MovieDetailsFragment : Fragment() {
 
     private lateinit var viewModel: MovieDetailsViewModel
     private lateinit var binding: MovieDetailsFragmentBinding
-    lateinit var bundle: Bundle
+    private lateinit var bundle: Bundle
 
     @MovieScope
     @Inject
@@ -55,6 +60,7 @@ class MovieDetailsFragment : Fragment() {
 
     }
 
+    //Shared ViewModel to pass data between fragments
     private val cachedVm : MainActivityViewModel by lazy {
         activity?.run {
             ViewModelProvider(this).get(MainActivityViewModel::class.java)
@@ -152,6 +158,10 @@ class MovieDetailsFragment : Fragment() {
         })
     }
 
+    /**
+     * This method is used for Showing/Hiding progress
+     * @param isLoading is used for hide show progress
+     */
     private fun showLoading(isLoading: Boolean) {
         if(isLoading){
             binding.progressBar.show()

@@ -81,10 +81,16 @@ fun Fragment.replaceFragment(
     }
 }
 
+/**
+ * To Show a view
+ */
 fun View.show() {
     visibility = View.VISIBLE
 }
 
+/**
+ * To Hide a view
+ */
 fun View.hide() {
     visibility = View.GONE
 }

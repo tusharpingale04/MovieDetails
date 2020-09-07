@@ -10,7 +10,9 @@ import com.tushar.mdetails.data.local.Movie
 import com.tushar.mdetails.databinding.ItemMovieBinding
 import com.tushar.mdetails.ui.movieslist.MovieRowViewModel
 
-
+/**
+ * Adapter class to inflate Similar Movies items in Movie Details Screen
+ */
 class SimilarMovieAdapter : BaseAdapter<Movie>(DIFF_CALLBACK) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {

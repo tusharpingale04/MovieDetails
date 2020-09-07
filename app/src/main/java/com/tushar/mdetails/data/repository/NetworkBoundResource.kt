@@ -10,6 +10,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.Response
 
+/**
+ * This Class helps to fetch the data from network and persist into DB and then
+ * send it back to UI.
+ */
 abstract class NetworkBoundResource<ResultType,RequestType : NetworkResponseModel,
         Mapper : NetworkResponseMapper<RequestType>> {
 

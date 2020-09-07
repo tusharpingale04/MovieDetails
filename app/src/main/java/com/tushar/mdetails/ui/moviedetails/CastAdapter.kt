@@ -8,6 +8,9 @@ import com.tushar.mdetails.base.BaseAdapter
 import com.tushar.mdetails.data.remote.Cast
 import com.tushar.mdetails.databinding.ItemCastBinding
 
+/**
+ * Adapter class to inflate cast items in Movie Details Screen
+ */
 class CastAdapter : BaseAdapter<Cast>(DIFF_CALLBACK) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {

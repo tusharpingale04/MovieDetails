@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.tushar.mdetails.R
 
-
+/**
+ * Base Adapter to reduce code redundancy into the adapter class
+ * This adapter accepts a Diff utils object to make list changes faster by object id of old and new list object
+ */
 abstract class BaseAdapter<T : Any>(callback: DiffUtil.ItemCallback<T>) : ListAdapter<T, BaseViewHolder<ViewDataBinding>>(callback) {
 
     override fun onBindViewHolder(holder: BaseViewHolder<ViewDataBinding>, position: Int) {
